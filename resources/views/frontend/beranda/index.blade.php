@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 
-@section('title', 'Mindig - Mini Digital')
+@section('title', 'Beranda - ' . config('app.name'))
 
 @section('content')
     <!-- Hero Slider Section -->
@@ -16,7 +16,7 @@
                             </div>
                         @empty
                             <div class="slide w-full flex-shrink-0">
-                                <img src="https://picsum.photos/1200/400?random=1" alt="Slide" class="w-full h-96 object-cover">
+                                <img src="{{ asset('default-slider.png') }}" alt="Default Slide" class="w-full h-96 object-cover">
                             </div>
                         @endforelse
                     </div>
@@ -45,7 +45,7 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 @forelse ($products as $product)
-                    <div class="product-card bg-white border border-black overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='{{ url('/detail-produk') }}'">
+                    <div class="product-card bg-white border border-black overflow-hidden hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='{{ url('/produk') }}'">
                         <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-xl font-semibold text-black mb-2">{{ $product->name }}</h3>
@@ -55,7 +55,7 @@
                 @empty
                     @for ($i = 1; $i <= 3; $i++)
                         <div class="product-card bg-white border border-black overflow-hidden">
-                            <img src="https://picsum.photos/400/300?random={{ $i }}" alt="Produk" class="w-full h-48 object-cover">
+                            <img src="{{ asset('default-product.png') }}" alt="Produk" class="w-full h-48 object-cover">
                             <div class="p-6">
                                 <h3 class="text-xl font-semibold text-black mb-2">Produk Digital</h3>
                                 <p class="text-black">Deskripsi singkat produk digital</p>
@@ -82,7 +82,7 @@
                 @empty
                     @for ($i = 1; $i <= 3; $i++)
                         <div class="partner-card bg-white border border-black p-8 hover:shadow-md transition-shadow">
-                            <img src="https://picsum.photos/200/100?random={{ $i }}" alt="Mitra" class="w-full h-20 object-contain">
+                            <img src="{{ asset('default-mitra.png') }}" alt="Mitra" class="w-full h-20 object-contain">
                         </div>
                     @endfor
                 @endforelse
@@ -111,24 +111,7 @@
                         </div>
                     </div>
                 @empty
-                    @php $fallbackFaqs = [
-                        ['Apa itu Mindig?', 'Mindig adalah platform digital yang menyediakan berbagai solusi teknologi untuk membantu bisnis Anda berkembang di era digital.'],
-                        ['Bagaimana cara menggunakan layanan Mindig?', 'Anda dapat memulai dengan mendaftar akun, memilih paket layanan yang sesuai, dan tim kami akan membantu Anda dalam proses implementasi.'],
-                        ['Apakah ada dukungan teknis?', 'Ya, kami menyediakan dukungan teknis 24/7 melalui berbagai channel komunikasi untuk memastikan layanan Anda berjalan dengan lancar.'],
-                    ]; @endphp
-                    @foreach ($fallbackFaqs as $idx => $faq)
-                        <div class="faq-item border-b border-black py-4">
-                            <button class="faq-question w-full text-left flex justify-between items-center py-4 text-lg font-semibold text-black hover:text-gray-600 transition-colors" onclick="toggleFAQ({{ $idx }})">
-                                <span>{{ $faq[0] }}</span>
-                                <svg class="faq-icon w-5 h-5 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            <div class="faq-answer hidden py-4 text-black">
-                                <p>{{ $faq[1] }}</p>
-                            </div>
-                        </div>
-                    @endforeach
+                    <div class="text-center text-black py-6">Data belum tersedia.</div>
                 @endforelse
             </div>
         </div>

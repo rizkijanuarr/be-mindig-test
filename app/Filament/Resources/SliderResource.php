@@ -32,8 +32,11 @@ class SliderResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('sort')
-                    ->numeric()
-                    ->required(),
+                ->numeric()
+                ->required()
+                ->default(0)
+                ->minValue(0)
+                ->suffixIcon('heroicon-m-bars-3-bottom-left'),
                 Forms\Components\FileUpload::make('image')
                     ->image()
                     ->required(),

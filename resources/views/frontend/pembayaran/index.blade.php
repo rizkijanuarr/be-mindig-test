@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 
-@section('title', 'Pembayaran - Mindig')
+@section('title', 'Pembayaran - ' . config('app.name'))
 
 @section('content')
     <!-- Page Header -->
@@ -49,7 +49,7 @@
 
                             <div>
                                 <h3 class="text-lg font-semibold text-black mb-2">Total Pembayaran:</h3>
-                                <p class="text-2xl font-bold text-black" id="total-display">Rp
+                                <p class="text-2xl font-bold text-black" id="total-display">IDR
                                     {{ number_format($product->price, 0, ',', '.') }}</p>
                             </div>
                         @else
@@ -65,7 +65,7 @@
                 <div class="bg-white border-2 border-black p-8">
                     <h2 class="text-2xl font-bold text-black mb-6">Data Pembayaran</h2>
                     <form action="{{ route('payment.store') }}" method="POST" enctype="multipart/form-data"
-                        class="space-y-6">
+                        class="space-y-6" id="payment-form">
                         @csrf
 
                         <!-- Hidden Fields -->
@@ -105,7 +105,7 @@
                             <label for="image" class="block text-sm font-semibold text-black mb-2">Upload Bukti
                                 Transfer</label>
                             <div class="border-2 border-dashed border-black p-6 text-center">
-                                <input type="file" id="image" name="image" accept="image/*" class="hidden" required
+                                <input type="file" id="image" name="image" accept="image/png, image/jpg, image/jpeg" class="hidden" required
                                     onchange="previewImage(this)">
                                 <label for="image" class="cursor-pointer">
                                     <div class="text-black" id="upload-area">
@@ -116,7 +116,7 @@
                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
                                         <p class="text-sm font-medium">Klik untuk upload bukti transfer</p>
-                                        <p class="text-xs text-gray-600">PNG, JPG hingga 10MB</p>
+                                        <p class="text-xs text-gray-600">Hanya PNG, JPG, JPEG. Maksimal 1MB</p>
                                     </div>
                                 </label>
                                 <div id="image-preview" class="hidden mt-4">
@@ -128,8 +128,8 @@
 
                         <!-- Submit Button -->
                         <div class="pt-4">
-                            <button type="submit"
-                                class="w-full bg-black text-white px-6 py-4 text-lg font-semibold hover:bg-white hover:text-black border-2 border-black transition-all duration-300">
+                            <button type="submit" id="submit-btn" disabled
+                                class="w-full bg-black text-white px-6 py-4 text-lg font-semibold hover:bg-white hover:text-black border-2 border-black transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed">
                                 Konfirmasi Pembayaran
                             </button>
                         </div>
@@ -139,6 +139,7 @@
         </div>
     </section>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function updateTotal() {
             const quantity = document.getElementById('quantity').value || 1;
@@ -153,18 +154,67 @@
         // Preview uploaded image
         function previewImage(input) {
             if (input.files && input.files[0]) {
-                const reader = new FileReader();
                 const file = input.files[0];
+                const validTypes = ['image/png', 'image/jpg', 'image/jpeg'];
+                const maxSize = 1024 * 1024; // 1MB
 
+                if (!validTypes.includes(file.type)) {
+                    input.value = '';
+                    Swal.fire({ icon: 'error', title: 'File tidak valid', text: 'Hanya PNG, JPG, JPEG yang diperbolehkan.' });
+                    toggleSubmit();
+                    return;
+                }
+                if (file.size > maxSize) {
+                    input.value = '';
+                    Swal.fire({ icon: 'error', title: 'Ukuran terlalu besar', text: 'Maksimal ukuran file 1MB.' });
+                    toggleSubmit();
+                    return;
+                }
+
+                const reader = new FileReader();
                 reader.onload = function(e) {
                     document.getElementById('upload-area').classList.add('hidden');
                     document.getElementById('image-preview').classList.remove('hidden');
                     document.getElementById('preview-img').src = e.target.result;
                     document.getElementById('file-name').textContent = file.name;
                 }
-
                 reader.readAsDataURL(file);
             }
         }
+
+        function toggleSubmit() {
+            const btn = document.getElementById('submit-btn');
+            const productId = document.querySelector('input[name="product_id"]').value;
+            const qty = document.getElementById('quantity').value;
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const image = document.getElementById('image').files[0];
+
+            const qtyOk = Number(qty) >= 1;
+            const phoneOk = phone.length > 0;
+            const addressOk = address.length > 0;
+            const imageOk = !!image;
+            const productOk = !!productId;
+
+            btn.disabled = !(qtyOk && phoneOk && addressOk && imageOk && productOk);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // SweetAlert for server-side validation errors
+            @if ($errors->any())
+                const messages = `{!! implode('<br>', $errors->all()) !!}`;
+                Swal.fire({ icon: 'error', title: 'Validasi gagal', html: messages });
+            @endif
+
+            // Bind listeners to toggle submit
+            ['quantity', 'phone', 'address', 'image'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', toggleSubmit);
+                    el.addEventListener('change', toggleSubmit);
+                }
+            });
+            toggleSubmit();
+        });
     </script>
 @endsection

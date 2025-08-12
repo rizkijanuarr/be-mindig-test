@@ -33,7 +33,10 @@ class MitraResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('sort')
                     ->numeric()
-                    ->required(),
+                    ->required()
+                    ->default(0)
+                    ->minValue(0)
+                    ->suffixIcon('heroicon-m-bars-3-bottom-left'),
                 Forms\Components\FileUpload::make('image')
                     ->image()
                     ->required(),

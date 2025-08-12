@@ -14,6 +14,11 @@ class ProfitChart extends ChartWidget
 {
     use InteractsWithPageFilters;
 
+    public static function canView(): bool
+    {
+        return auth()->user()->hasRole(['super_admin']);
+    }
+
     protected static ?string $pollingInterval = null;
     protected static ?string $heading = 'Profit';
     protected static ?string $maxHeight = '300px';

@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app')
 
-@section('title', 'Produk - Mindig')
+@section('title', 'Produk - ' . config('app.name'))
 
 @section('content')
     <!-- Page Header -->
@@ -8,7 +8,7 @@
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
                 <h1 class="text-4xl font-bold text-black mb-4">Produk</h1>
-                <p class="text-black text-lg">Lorem ipsum dolor sit amet</p>
+                <p class="text-black text-lg">Produk unggulan dari kami.</p>
             </div>
         </div>
     </section>
@@ -18,15 +18,17 @@
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 @forelse ($products as $product)
-                    <div class="product-card bg-white border border-black overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="product-card group bg-white border border-black overflow-hidden hover:shadow-lg transition-shadow">
                         <div class="relative">
                             <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}"
                                 class="w-full h-48 object-cover">
-                            <div class="absolute bottom-0 left-0 right-0 p-4">
+                            <div class="absolute inset-0 flex items-end p-4 pointer-events-none">
+                                <!-- gradient overlay for better contrast -->
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
                                 <!-- Updated href to use product ID route -->
-                                <a href="{{ route('product.detail', $product->id) }}" class="block">
+                                <a href="{{ route('product.detail', $product->id) }}" class="block w-full pointer-events-auto">
                                     <button
-                                        class="bg-black text-white px-6 py-2 border-2 border-black hover:bg-white hover:text-black transition-colors w-full">
+                                        class="w-full bg-black text-white px-6 py-2 border-2 border-black transition-all duration-300 hover:bg-white hover:text-black opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0">
                                         Detail Produk
                                     </button>
                                 </a>

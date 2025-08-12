@@ -37,6 +37,12 @@ class FaqResource extends Resource
                 Forms\Components\TextInput::make('jawaban')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\TextInput::make('sort')
+                    ->numeric()
+                    ->required()
+                    ->default(0)
+                    ->minValue(0)
+                    ->suffixIcon('heroicon-m-bars-3-bottom-left'),
             ]);
     }
 
@@ -44,6 +50,9 @@ class FaqResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('sort')
+                    ->label('Sort')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('pertanyaan')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('jawaban')

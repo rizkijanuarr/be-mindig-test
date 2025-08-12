@@ -18,6 +18,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+ 
 
 class CmsPanelProvider extends PanelProvider
 {
@@ -29,6 +30,11 @@ class CmsPanelProvider extends PanelProvider
             ->path('cms')
             ->login()
             ->registration()
+            ->favicon(asset('favicon.svg'))
+            ->brandLogo(fn () => view('filament.brand'))
+            ->brandName(config('app.brand_name', config('app.name')))
+            ->brandLogoHeight('2rem') 
+            ->sidebarCollapsibleOnDesktop() 
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -66,6 +72,11 @@ class CmsPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                \Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin::make()->color('#fbc03a'),
+                
             ]);
     }
 }

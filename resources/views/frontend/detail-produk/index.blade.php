@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 {{-- Fixed syntax error by removing Blade syntax from @section parameter --}}
-@section('title', ($product->name ?? 'Detail Produk') . ' - Mindig')
+@section('title', ($product->name ?? 'Detail Produk') . ' - ' . config('app.name'))
 
 @section('content')
     <!-- Product Detail Section -->
@@ -38,14 +38,14 @@
                     <p class="text-black text-lg mb-6">
                         {{ $product->description ?? 'Deskripsi produk akan ditampilkan di sini' }}</p>
                     @if ($product->price)
-                        <div class="text-3xl font-bold text-black mb-8">Rp {{ number_format($product->price, 0, ',', '.') }}
+                        <div class="text-3xl font-bold text-black mb-8">IDR {{ number_format($product->price, 0, ',', '.') }}
                         </div>
                     @endif
                 </div>
 
                 <!-- Pay Now Button -->
                 <div class="text-center">
-                    <a href="{{ url('/pembayaran') }}?product_id={{ $product->id }}"
+                    <a href="{{ route('pay.now', ['product_id' => $product->id]) }}" id="pay-now-btn"
                         class="inline-block bg-black text-white px-12 py-3 border-2 border-black hover:bg-white hover:text-black transition-colors text-lg font-semibold">
                         Pay Now!
                     </a>
@@ -90,3 +90,31 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    @guest
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const btn = document.getElementById('pay-now-btn');
+                if (!btn) return;
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('href');
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Butuh Login',
+                        html: 'Anda akan di-redirect ke halaman Login, untuk login terlebih dahulu, atau jika belum ada akun silahkan register',
+                        showCancelButton: true,
+                        confirmButtonText: 'Lanjutkan',
+                        cancelButtonText: 'Batal',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = target;
+                        }
+                    });
+                });
+            });
+        </script>
+    @endguest
+@endpush

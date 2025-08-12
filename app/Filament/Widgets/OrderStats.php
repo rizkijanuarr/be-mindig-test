@@ -17,10 +17,10 @@ class OrderStats extends BaseWidget
 
     protected static ?string $pollingInterval = null;
 
-    // public static function canView(): bool
-    // {
-    //     return auth()->user()->hasRole(['super_admin', 'manager']);
-    // }
+    public static function canView(): bool
+    {
+        return auth()->user()->hasRole(['super_admin']);
+    }
 
     protected function getStats(): array
     {

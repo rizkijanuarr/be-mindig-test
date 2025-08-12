@@ -16,11 +16,11 @@ class OrderStats extends BaseWidget
 {
     use InteractsWithPageTable;
 
-    // public static function canView(): bool
-    // {
-    //     $currentUser = Auth::user();
-    //     return $currentUser->hasRole(['admin']);
-    // }
+    public static function canView(): bool
+    {
+        $currentUser = Auth::user();
+        return $currentUser->hasRole(['super_admin']);
+    }
 
     protected function getStats(): array
     {

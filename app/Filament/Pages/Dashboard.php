@@ -8,6 +8,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Dashboard as BaseDashboard;
+use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends BaseDashboard
 {
@@ -16,8 +17,21 @@ class Dashboard extends BaseDashboard
     protected static ?string $navigationIcon = 'heroicon-o-chart-pie';
     protected static ?string $title = 'Dashboard';
 
+    // public static function canAccess(): bool
+    // {
+    //     // Halaman bisa diakses user login, namun filter hanya untuk super_admin
+    //     return Auth::check();
+    // }
+
     public function filtersForm(Form $form): Form
     {
+        $isSuper = Auth::user()?->hasRole('super_admin') ?? false;
+
+        if (! $isSuper) {
+            // Non-super_admin: sembunyikan filter
+            return $form->schema([]);
+        }
+
         return $form
             ->schema([
                 Section::make()

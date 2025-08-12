@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Illuminate\Support\Facades\Auth;
 
 class OrderResource extends Resource
 {
@@ -34,9 +35,14 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
+                // User selection: visible for non-customer, hidden and auto-set for customer
+                Forms\Components\Hidden::make('user_id')
+                    ->default(fn () => Auth::id())
+                    ->visible(fn () => Auth::user()?->hasRole('customer')),
                 Forms\Components\Select::make('user_id')
                     ->relationship('user', 'name')
-                    ->required(),
+                    ->required()
+                    ->visible(fn () => ! Auth::user()?->hasRole('customer')),
                 Forms\Components\Select::make('product_id')
                     ->relationship('product', 'name')
                     ->required()
@@ -103,7 +109,8 @@ class OrderResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('user.name')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->visible(fn () => ! Auth::user()?->hasRole('customer')),
                 Tables\Columns\TextColumn::make('product.name')
                     ->numeric()
                     ->sortable(),
@@ -111,10 +118,12 @@ class OrderResource extends Resource
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('profit')
-                    ->money('IDR')
+                    
+                    ->prefix('IDR ')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total')
-                    ->money('IDR')
+                    
+                    ->prefix('IDR ')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
@@ -178,10 +187,17 @@ class OrderResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        $query = parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+
+        $user = Auth::user();
+        if ($user && $user->hasRole('customer')) {
+            $query->where('user_id', $user->id);
+        }
+
+        return $query;
     }
 
     public static function getWidgets(): array

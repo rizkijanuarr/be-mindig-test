@@ -1,10 +1,18 @@
 <!-- Frontend Footer Component -->
-<footer class="bg-white border-t border-black py-8">
-    <div class="container mx-auto px-4">
-        <div class="text-center">
-            <p class="text-black">
-                Mindig &copy; 2025.<br/> Powered with <span class="text-red-500">&hearts;</span> by PT. Artama Sentosa Indonesia
-            </p>
+@php
+    /** @var \App\Models\Footer|null $footer */
+    $footer = \App\Models\Footer::query()
+        ->where('is_active', true)
+        ->latest('id')
+        ->first();
+@endphp
+
+@if ($footer)
+    <footer class="bg-white border-t border-black py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center text-black prose max-w-none">
+                {!! $footer->content !!}
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
+@endif

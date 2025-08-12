@@ -12,6 +12,7 @@ use Filament\Resources\Pages\ListRecords;
 use Filament\Support\Enums\IconPosition;
 use Filament\Actions;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class ListOrders extends ListRecords
 {
@@ -30,27 +31,49 @@ class ListOrders extends ListRecords
 
     public function getTabs(): array
     {
+        $user = Auth::user();
+        $isSuper = $user?->hasRole('super_admin');
+        $userId = $user?->id;
+
+        $base = Order::query()->when(! $isSuper, fn ($q) => $q->where('user_id', $userId));
+
+        $allCount = (clone $base)->count();
+        $pendingCount = (clone $base)->where('status', 'pending')->count();
+        $approvedCount = (clone $base)->where('status', 'approved')->count();
+        $rejectedCount = (clone $base)->where('status', 'rejected')->count();
+
         return [
             'all' => Tab::make('Semua')
                 ->icon('heroicon-o-clipboard-document-list')
                 ->badgeColor('gray')
-                ->badge(Order::count())
-                ->modifyQueryUsing(fn(Builder $query) => $query),
+                ->badge($allCount)
+                ->modifyQueryUsing(function (Builder $query) use ($isSuper, $userId) {
+                    return $query->when(! $isSuper, fn ($q) => $q->where('user_id', $userId));
+                }),
             'pending' => Tab::make('Pending')
                 ->icon('heroicon-o-clock')
                 ->badgeColor('warning')
-                ->badge(Order::where('status', 'pending')->count())
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'pending')),
+                ->badge($pendingCount)
+                ->modifyQueryUsing(function (Builder $query) use ($isSuper, $userId) {
+                    return $query->when(! $isSuper, fn ($q) => $q->where('user_id', $userId))
+                        ->where('status', 'pending');
+                }),
             'approved' => Tab::make('Approved')
                 ->icon('heroicon-o-check-circle')
                 ->badgeColor('success')
-                ->badge(Order::where('status', 'approved')->count())
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'approved')),
+                ->badge($approvedCount)
+                ->modifyQueryUsing(function (Builder $query) use ($isSuper, $userId) {
+                    return $query->when(! $isSuper, fn ($q) => $q->where('user_id', $userId))
+                        ->where('status', 'approved');
+                }),
             'rejected' => Tab::make('Rejected')
                 ->icon('heroicon-o-x-circle')
                 ->badgeColor('danger')
-                ->badge(Order::where('status', 'rejected')->count())
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', 'rejected')),
+                ->badge($rejectedCount)
+                ->modifyQueryUsing(function (Builder $query) use ($isSuper, $userId) {
+                    return $query->when(! $isSuper, fn ($q) => $q->where('user_id', $userId))
+                        ->where('status', 'rejected');
+                }),
         ];
     }
 

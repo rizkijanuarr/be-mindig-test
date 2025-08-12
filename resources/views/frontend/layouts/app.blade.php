@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body class="bg-white">
+    @include('frontend.components.announcement')
     @include('frontend.navbar')
 
     <main>
@@ -17,5 +18,6 @@
     @include('frontend.footer')
 
     @include('frontend.components.scripts')
+    @stack('scripts')
 </body>
 </html>

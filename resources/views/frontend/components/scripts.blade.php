@@ -143,6 +143,25 @@ function initSuccessPageAnimations() {
 document.addEventListener("DOMContentLoaded", () => {
   if (document.querySelector(".success-circle")) {
     initSuccessPageAnimations()
+
+    // Robust animation for SVG checkmark
+    const path = document.getElementById('checkmark')
+    if (path && typeof path.getTotalLength === 'function') {
+      try {
+        const len = Math.ceil(path.getTotalLength()) || 100
+        path.style.strokeDasharray = String(len)
+        path.style.strokeDashoffset = String(len)
+        // start draw slightly after bg scale animation
+        setTimeout(() => {
+          path.style.transition = 'stroke-dashoffset 800ms ease-out'
+          path.style.strokeDashoffset = '0'
+        }, 1100)
+      } catch (e) {
+        // Fallback: show instantly
+        path.style.strokeDasharray = 'none'
+        path.style.strokeDashoffset = '0'
+      }
+    }
   }
 })
 </script>
