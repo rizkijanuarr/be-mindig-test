@@ -80,12 +80,13 @@ class CmsPanelProvider extends PanelProvider
                 \Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin::make()->color('#FF0000'),
                 LocalLogins::make(),
                 EnvironmentIndicatorPlugin::make()
+                    ->visible(true)  // pastikan plugin tidak disembunyikan
                     ->color(fn() => match (app()->environment()) {
                         'production' => Color::Red,
                         'staging' => Color::Red,
                         default => Color::Green,
                     }),
-                GlobalSearchModalPlugin::make()
+                GlobalSearchModalPlugin::make(),
             ]);
     }
 }
