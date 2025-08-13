@@ -5,13 +5,14 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AnnouncementResource\Pages;
 use App\Filament\Resources\AnnouncementResource\RelationManagers;
 use App\Models\Announcement;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms;
+use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use TangoDevIt\FilamentEmojiPicker\EmojiPickerAction;
 
 class AnnouncementResource extends Resource
 {
@@ -33,7 +34,8 @@ class AnnouncementResource extends Resource
             ->schema([
                 Forms\Components\Textarea::make('information')
                     ->required()
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->hintAction(EmojiPickerAction::make('emoji-messagge')),
                 Forms\Components\Toggle::make('is_active')
                     ->required(),
             ]);

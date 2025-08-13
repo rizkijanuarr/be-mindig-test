@@ -8,12 +8,17 @@
     "require": {
         "php": "^8.2",
         "aymanalhattami/filament-slim-scrollbar": "^2.1",
+        "better-futures-studio/filament-local-logins": "^1.4",
         "bezhansalleh/filament-shield": "^3.3",
+        "charrafimed/global-search-modal": "^3.7",
         "filament/filament": "^3.3",
         "flowframe/laravel-trend": "^0.4.0",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "njxqlus/filament-progressbar": "^1.1"
+        "mohammadhprp/filament-ip-to-country-flag-column": "^1.0",
+        "njxqlus/filament-progressbar": "^1.1",
+        "pxlrbt/filament-environment-indicator": "^2.2",
+        "tangodev-it/filament-emoji-picker": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

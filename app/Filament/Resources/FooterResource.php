@@ -5,14 +5,15 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\FooterResource\Pages;
 use App\Filament\Resources\FooterResource\RelationManagers;
 use App\Models\Footer;
-use Filament\Forms;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms;
+use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\RichEditor;
+use TangoDevIt\FilamentEmojiPicker\EmojiPickerAction;
 
 class FooterResource extends Resource
 {

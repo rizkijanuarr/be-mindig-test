@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use BetterFuturesStudio\FilamentLocalLogins\LocalLogins;
+use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -18,7 +20,7 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
- 
+use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
 
 class CmsPanelProvider extends PanelProvider
 {
@@ -26,17 +28,17 @@ class CmsPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('cms')
+            ->id('admin')
             ->path('cms')
             ->login()
             ->registration()
             ->favicon(asset('favicon.svg'))
-            ->brandLogo(fn () => view('filament.brand'))
+            ->brandLogo(fn() => view('filament.brand'))
             ->brandName(config('app.brand_name', config('app.name')))
-            ->brandLogoHeight('2rem') 
-            ->sidebarCollapsibleOnDesktop() 
+            ->brandLogoHeight('2rem')
+            ->sidebarCollapsibleOnDesktop()
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Green,
             ])
             ->navigationGroups([
                 'Master Data',
@@ -75,8 +77,15 @@ class CmsPanelProvider extends PanelProvider
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
-                \Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin::make()->color('#fbc03a'),
-                
+                \Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin::make()->color('#FF0000'),
+                LocalLogins::make(),
+                EnvironmentIndicatorPlugin::make()
+                    ->color(fn() => match (app()->environment()) {
+                        'production' => Color::Red,
+                        'staging' => Color::Red,
+                        default => Color::Green,
+                    }),
+                GlobalSearchModalPlugin::make()
             ]);
     }
 }
