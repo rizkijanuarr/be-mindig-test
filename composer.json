@@ -48,6 +48,17 @@
             "@php artisan package:discover --ansi",
             "@php artisan filament:upgrade"
         ],
+        "refresh": [
+        "composer dumpautoload",
+        "php artisan config:clear",
+        "php artisan cache:clear",
+        "php artisan view:clear",
+        "php artisan route:clear",
+        "php artisan filament:optimize",
+        "php artisan filament:cache-components",
+        "php artisan icons:cache",
+        "php artisan filament:optimize-clear"
+    ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
