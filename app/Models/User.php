@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Providers\Filament\CmsPanelProvider;
+use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory;
     use Notifiable;
@@ -35,5 +37,10 @@ class User extends Authenticatable
     public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(\App\Models\Order::class);
+    }
+
+    public function canAccessPanel(\Filament\Panel $panel): bool
+    {
+        return true;  // atau logika akses sesuai kebutuhan
     }
 }
