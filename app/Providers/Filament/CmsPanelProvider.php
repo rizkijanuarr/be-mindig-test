@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use BetterFuturesStudio\FilamentLocalLogins\LocalLogins;
 use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
+use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -28,7 +29,7 @@ class CmsPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('admin')
+            ->id('cms')
             ->path('cms')
             ->login()
             ->registration()
@@ -57,10 +58,7 @@ class CmsPanelProvider extends PanelProvider
                 \App\Filament\Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->widgets([
-                // Widgets\AccountWidget::class,
-                // Widgets\FilamentInfoWidget::class,
-            ])
+            ->widgets([])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -75,10 +73,10 @@ class CmsPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->viteTheme('resources/css/filament/cms/theme.css')
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
                 \Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin::make()->color('#FF0000'),
-                LocalLogins::make(),
                 EnvironmentIndicatorPlugin::make()
                     ->visible(true)  // pastikan plugin tidak disembunyikan
                     ->color(fn() => match (app()->environment()) {
@@ -87,6 +85,14 @@ class CmsPanelProvider extends PanelProvider
                         default => Color::Green,
                     }),
                 GlobalSearchModalPlugin::make(),
+                AuthUIEnhancerPlugin::make()
+                    ->showEmptyPanelOnMobile(true)
+                    ->mobileFormPanelPosition('bottom')
+                    ->formPanelPosition('right')
+                    ->formPanelWidth('40%')
+                    ->emptyPanelBackgroundImageOpacity('70%')
+                    ->emptyPanelBackgroundImageUrl(asset('cover.jpg')),
+                LocalLogins::make(),
             ]);
     }
 }

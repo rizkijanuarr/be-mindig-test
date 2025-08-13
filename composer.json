@@ -11,6 +11,7 @@
         "better-futures-studio/filament-local-logins": "^1.4",
         "bezhansalleh/filament-shield": "^3.3",
         "charrafimed/global-search-modal": "^3.7",
+        "diogogpinto/filament-auth-ui-enhancer": "^1.0",
         "filament/filament": "^3.3",
         "flowframe/laravel-trend": "^0.4.0",
         "laravel/framework": "^12.0",
@@ -57,7 +58,8 @@
         "php artisan filament:optimize",
         "php artisan filament:cache-components",
         "php artisan icons:cache",
-        "php artisan filament:optimize-clear"
+        "php artisan filament:optimize-clear",
+        "npm run build"
     ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
