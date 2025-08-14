@@ -4,17 +4,14 @@ namespace App\Providers\Filament;
 
 use BetterFuturesStudio\FilamentLocalLogins\LocalLogins;
 use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
-use DiogoGPinto\AuthUIEnhancer\AuthUIEnhancerPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationItem;
 use Filament\Support\Colors\Color;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -73,7 +70,6 @@ class CmsPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->viteTheme('resources/css/filament/cms/theme.css')
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
                 \Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin::make()->color('#FF0000'),
@@ -85,13 +81,6 @@ class CmsPanelProvider extends PanelProvider
                         default => Color::Green,
                     }),
                 GlobalSearchModalPlugin::make(),
-                // AuthUIEnhancerPlugin::make()
-                //     ->showEmptyPanelOnMobile(true)
-                //     ->mobileFormPanelPosition('bottom')
-                //     ->formPanelPosition('right')
-                //     ->formPanelWidth('40%')
-                //     ->emptyPanelBackgroundImageOpacity('70%')
-                //     ->emptyPanelBackgroundImageUrl(asset('cover.jpg')),
                 LocalLogins::make(),
             ]);
     }
