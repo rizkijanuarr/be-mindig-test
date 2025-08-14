@@ -58,7 +58,9 @@
         "php artisan filament:optimize",
         "php artisan filament:cache-components",
         "php artisan icons:cache",
-        "php artisan filament:optimize-clear"
+        "php artisan filament:optimize-clear",
+        "sudo systemctl restart php8.4-fpm",
+        "sudo systemctl restart nginx"
     ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
