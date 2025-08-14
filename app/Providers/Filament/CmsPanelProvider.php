@@ -85,13 +85,13 @@ class CmsPanelProvider extends PanelProvider
                         default => Color::Green,
                     }),
                 GlobalSearchModalPlugin::make(),
-                AuthUIEnhancerPlugin::make()
-                    ->showEmptyPanelOnMobile(true)
-                    ->mobileFormPanelPosition('bottom')
-                    ->formPanelPosition('right')
-                    ->formPanelWidth('40%')
-                    ->emptyPanelBackgroundImageOpacity('70%')
-                    ->emptyPanelBackgroundImageUrl(asset('cover.jpg')),
+                // AuthUIEnhancerPlugin::make()
+                //     ->showEmptyPanelOnMobile(true)
+                //     ->mobileFormPanelPosition('bottom')
+                //     ->formPanelPosition('right')
+                //     ->formPanelWidth('40%')
+                //     ->emptyPanelBackgroundImageOpacity('70%')
+                //     ->emptyPanelBackgroundImageUrl(asset('cover.jpg')),
                 LocalLogins::make(),
             ]);
     }
