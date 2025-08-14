@@ -58,8 +58,7 @@
         "php artisan filament:optimize",
         "php artisan filament:cache-components",
         "php artisan icons:cache",
-        "php artisan filament:optimize-clear",
-        "npm run build"
+        "php artisan filament:optimize-clear"
     ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
